@@ -21,7 +21,7 @@ url = "https://en.wikipedia.org/wiki/Special:Random"
 #url = "https://en.wikipedia.org/wiki/Eukaryote"
 #url = "https://en.wikipedia.org/wiki/Uncertainty"
 # url = "https://en.wikipedia.org/wiki/Country"
-# url = "https://en.wikipedia.org/wiki/Emotional"
+# url = "https://en.wikipedia.org/wiki/Autostrada_A53_(Italy)" # LOOP
 
 driver.get(url)
 heading = driver.find_element_by_id("firstHeading")
@@ -50,8 +50,10 @@ while(heading.text != "Philosophy"):
                 continue
             elif l.text == "":
                 continue
+            # Get rid of selflink without href
             elif l.get_attribute("href") == None:
                 continue
+            # Get rid of all outside links
             elif not l.get_attribute("href").startswith("https://en.wikipedia.org"):
                 continue
             else:
@@ -65,15 +67,16 @@ while(heading.text != "Philosophy"):
     
     
     if link.get_attribute("href") in visited_links:
+        print("Whoops, loop! Ending application!")
         break
     link.click()
     # Simplest quickest solution
-    time.sleep(1)
+    time.sleep(2)
     visited_links.append(driver.current_url)
     transitions += 1
     heading = driver.find_element_by_id("firstHeading")
 
-print("This application made {} transitions and visited folowing links: ".format(transitions))
+print("Application made {} transitions and visited folowing links: ".format(transitions))
 print(visited_links)
 
 
